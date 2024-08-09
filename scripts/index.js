@@ -4,8 +4,8 @@ const giftbox = document.getElementById('merrywrap');
 const canvasC = document.getElementById('c');
 
 const config = {
-  birthdate: 'Jan 29, 2020',
-  name: 'Darlene'
+  birthdate: 'Aug 2, 2024',
+  name: 'Aracely Gonzales'
 };
 
 function hideEverything() {
@@ -27,7 +27,7 @@ const second = 1000,
   day = hour * 24;
 
 let countDown = new Date(`${config.birthdate} 00:00:00`).getTime();
-x = setInterval(function() {
+x = setInterval(function () {
   let now = new Date().getTime(),
     distance = countDown - now;
 
@@ -48,7 +48,7 @@ x = setInterval(function() {
     hw = w / 2, // half-width
     hh = h / 2,
     opts = {
-      strings: ['HAPPY', 'BIRTHDAY!', config.name],
+      strings: ['FELIZ', 'CUMPLEAÑOS!', config.name],
       charSize: 30,
       charSpacing: 35,
       lineHeight: 40,
@@ -118,7 +118,7 @@ x = setInterval(function() {
 
     this.reset();
   }
-  Letter.prototype.reset = function() {
+  Letter.prototype.reset = function () {
     this.phase = 'firework';
     this.tick = 0;
     this.spawned = false;
@@ -131,7 +131,7 @@ x = setInterval(function() {
       opts.fireworkBaseLineWidth + opts.fireworkAddedLineWidth * Math.random();
     this.prevPoints = [[0, hh, 0]];
   };
-  Letter.prototype.step = function() {
+  Letter.prototype.step = function () {
     if (this.phase === 'firework') {
       if (!this.spawned) {
         ++this.tick;
@@ -192,9 +192,9 @@ x = setInterval(function() {
           this.shards = [];
 
           let shardCount =
-              (opts.fireworkBaseShards +
-                opts.fireworkAddedShards * Math.random()) |
-              0,
+            (opts.fireworkBaseShards +
+              opts.fireworkAddedShards * Math.random()) |
+            0,
             angle = Tau / shardCount,
             cos = Math.cos(angle),
             sin = Math.sin(angle),
@@ -276,7 +276,7 @@ x = setInterval(function() {
           (opts.balloonBaseSize + opts.balloonAddedSize * Math.random()) | 0;
 
         let rad =
-            opts.balloonBaseRadian + opts.balloonAddedRadian * Math.random(),
+          opts.balloonBaseRadian + opts.balloonAddedRadian * Math.random(),
           vel = opts.balloonBaseVel + opts.balloonAddedVel * Math.random();
 
         this.vx = Math.cos(rad) * vel;
@@ -364,7 +364,7 @@ x = setInterval(function() {
     this.size =
       opts.fireworkShardBaseSize + opts.fireworkShardAddedSize * Math.random();
   }
-  Shard.prototype.step = function() {
+  Shard.prototype.step = function () {
     this.x += this.vx;
     this.y += this.vy += opts.gravity;
 
@@ -403,42 +403,57 @@ x = setInterval(function() {
     ctx.bezierCurveTo(x + size / 4, y - size, x + size / 2, y - size / 2, x, y);
   }
 
+  let animationCount = 0;
+  const maxAnimations = 3;
+
   function anim() {
     window.requestAnimationFrame(anim);
-
+  
     ctx.fillStyle = '#fff';
     ctx.fillRect(0, 0, w, h);
-
+  
     ctx.translate(hw, hh);
-
+  
     let done = true;
     for (let l = 0; l < letters.length; ++l) {
       letters[l].step();
       if (letters[l].phase !== 'done') done = false;
     }
-
+  
     ctx.translate(-hw, -hh);
-
-    if (done) for (let l = 0; l < letters.length; ++l) letters[l].reset();
+  
+    if (done) {
+      animationCount++;
+      if (animationCount < maxAnimations) {
+        for (let l = 0; l < letters.length; ++l) letters[l].reset();
+      } else {
+        resetToGiftBox();  // Redirige a la galería después de la tercera repetición
+      }
+    }
   }
-
+  
+  function resetToGiftBox() {
+    window.location.href = "galeria.html";  // Redirige a la página de la galería
+  }
+  
+  // Inicializar las letras para la animación
   for (let i = 0; i < opts.strings.length; ++i) {
     for (let j = 0; j < opts.strings[i].length; ++j) {
       letters.push(
         new Letter(
           opts.strings[i][j],
           j * opts.charSpacing +
-            opts.charSpacing / 2 -
-            (opts.strings[i].length * opts.charSize) / 2,
+          opts.charSpacing / 2 -
+          (opts.strings[i].length * opts.charSize) / 2,
           i * opts.lineHeight +
-            opts.lineHeight / 2 -
-            (opts.strings.length * opts.lineHeight) / 2
+          opts.lineHeight / 2 -
+          (opts.strings.length * opts.lineHeight) / 2
         )
       );
     }
   }
 
-  window.addEventListener('resize', function() {
+  window.addEventListener('resize', function () {
     w = c.width = window.innerWidth;
     h = c.height = window.innerHeight;
 

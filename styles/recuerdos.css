@@ -1,0 +1,85 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(145deg, #55566a 0%, #131318 76%);
+    position: relative;
+}
+
+.titulo {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 34px;
+    color: rgba(255, 255, 255, 0.7);
+    z-index: 1; /* Coloca el título detrás de las imágenes */
+    text-align: center;
+    width: 100%;
+}
+
+.image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.draggable {
+    position: absolute;
+    width: 220px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: grab;
+    transition: transform 0.2s; /* Añadimos transición para la sombra */
+    transform-origin: center center;
+    text-align: center;
+    transform: rotate(0deg); /* Inicialización para la rotación */
+}
+
+.draggable img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.draggable p {
+    margin: 0;
+    font-size: 14px;
+    color: #2e2e2e;
+}
+
+.draggable.active {
+    transform: scale(1.2); /* Aumenta la imagen seleccionada */
+    z-index: 10; /* Asegura que la imagen seleccionada esté en la parte superior */
+    box-shadow: 0 0 20px 10px rgba(63, 62, 62, 0.6); /* Sombra blanca durante el movimiento */
+}
+
+.draggable:active {
+    cursor: grabbing;
+}
+
+/* Estilos para la previsualización */
+.preview-mode .image-container::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 5;
+}
+
+.draggable.preview-active {
+    z-index: 20;
+    cursor: default;
+    pointer-events: none; /* Desactiva el movimiento */
+}
