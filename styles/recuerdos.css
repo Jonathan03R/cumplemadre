@@ -30,7 +30,7 @@ body {
 
 .draggable {
     position: absolute;
-    width: 220px;
+    width: 120px;
     padding: 10px;
     background-color: #fff;
     border-radius: 10px;
@@ -40,6 +40,8 @@ body {
     transform-origin: center center;
     text-align: center;
     transform: rotate(0deg); /* Inicialización para la rotación */
+    will-change: transform, top, left;
+
 }
 
 .draggable img {

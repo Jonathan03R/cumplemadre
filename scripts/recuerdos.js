@@ -3,25 +3,21 @@ document.addEventListener('DOMContentLoaded', function() {
     let previewMode = false;
 
     draggables.forEach(draggable => {
-        
         const initialRotation = Math.floor(Math.random() * 90) - 45;
         draggable.dataset.rotation = initialRotation; // Guardar la rotación inicial
         draggable.style.transform = `rotate(${initialRotation}deg)`;
 
-   
+        // Centrar inicialmente la imagen
         const containerWidth = window.innerWidth;
         const containerHeight = window.innerHeight;
-
         draggable.style.left = `${(containerWidth - draggable.clientWidth) / 2}px`;
         draggable.style.top = `${(containerHeight - draggable.clientHeight) / 2}px`;
-
 
         draggable.dataset.initialLeft = draggable.style.left;
         draggable.dataset.initialTop = draggable.style.top;
 
-
         function startDrag(e) {
-            if (previewMode) return; 
+            if (previewMode) return;
 
             e.preventDefault();
             const isTouch = e.type.includes('touch');
@@ -67,9 +63,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Función para manejar el doble clic o doble toque
         draggable.addEventListener('dblclick', function() {
             if (!previewMode) {
-                // Guardar la posición actual antes de centrar
-                draggable.dataset.currentLeft = draggable.style.left;
-                draggable.dataset.currentTop = draggable.style.top;
+                draggable.dataset.lastLeft = draggable.style.left;  // Guardar la última posición conocida
+                draggable.dataset.lastTop = draggable.style.top;
 
                 previewMode = true;
                 document.body.classList.add('preview-mode');
@@ -90,15 +85,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 clearTimeout(touchTimeout);
                 touchTimeout = null;
                 if (!previewMode) {
-                    // Guardar la posición actual antes de centrar
-                    draggable.dataset.currentLeft = draggable.style.left;
-                    draggable.dataset.currentTop = draggable.style.top;
+                    draggable.dataset.lastLeft = draggable.style.left;
+                    draggable.dataset.lastTop = draggable.style.top;
 
                     previewMode = true;
                     document.body.classList.add('preview-mode');
                     centerImage(draggable);
                     draggable.classList.add('preview-active');
-                    draggable.style.pointerEvents = 'none'; // Desactiva el movimiento
+                    draggable.style.pointerEvents = 'none';
                 }
             }
         });
@@ -113,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         element.style.left = `${(containerWidth - elementWidth) / 2}px`;
         element.style.top = `${(containerHeight - elementHeight) / 2}px`;
-        element.style.transform = `rotate(0deg) scale(2)`; // Centrar, rotar y agrandar
+        element.style.transform = `rotate(0deg) scale(2.5)`; // Centrar, rotar y agrandar
     }
 
     // Salir del modo previsualización al hacer clic fuera de la imagen
@@ -126,10 +120,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 activeElement.classList.remove('preview-active');
                 activeElement.style.pointerEvents = ''; // Reactiva el movimiento
 
-                // Restaurar la rotación y la posición antes de la previsualización
+                // Restaurar la rotación y regresar a la última posición conocida
                 activeElement.style.transform = `rotate(${activeElement.dataset.rotation}deg) scale(1)`;
-                activeElement.style.left = activeElement.dataset.currentLeft;
-                activeElement.style.top = activeElement.dataset.currentTop;
+                activeElement.style.left = activeElement.dataset.lastLeft;  // Regresa a la última posición conocida
+                activeElement.style.top = activeElement.dataset.lastTop;
             }
         }
     });
