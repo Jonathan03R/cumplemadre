@@ -16,4 +16,4 @@ Para ejecutar este proyecto localmente, sigue estos pasos:
 1. *Clona el Repositorio*
 
    ```bash
-   git clone https://github.com/tu_usuario/nombre_del_repositorio.git
+   https://github.com/Jonathan03R/cumplemadre.git
